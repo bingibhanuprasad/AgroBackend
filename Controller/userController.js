@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { createUser, findUserByEmail } = require('../Model/userModel');
 require('dotenv').config();
 
-exports.signup = (req, res) => {
+exports.signup =(req, res) => {
   const { name, email, password } = req.body;
 
   findUserByEmail(email, (err, results) => {
