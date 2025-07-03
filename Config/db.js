@@ -16,8 +16,8 @@ pool.getConnection((err, connection) => {
     console.error('❌ DB connection failed:', err.message);
   } else {
     console.log('✅ MySQL connected using connection pool');
-    connection.release(); // Release connection back to the pool
+    connection.release();  
   }
 });
 
-module.exports = pool.promise(); // Use promise-based pool
+module.exports = pool.promise();  
