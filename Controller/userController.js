@@ -1,4 +1,3 @@
-// Controller/authController.js
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { createUser, findUserByEmail, getAllUser } = require('../Model/userModel');
@@ -15,7 +14,7 @@ exports.signup = async (req, res) => {
     if (existingUser.length > 0)
       return res.status(400).json({ error: 'Email already exists' });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10); // 🔐 Hashing the password
     await createUser(name, email, hashedPassword);
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
@@ -42,14 +41,18 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'default_jwt_secret', // fallback for safety
       { expiresIn: '1d' }
     );
 
+    // 🔐 Temporary admin role check based on email only
+    let role = (user.email === "bhanuprasdbingi@gmail.com") ? "admin" : "user";
+
     res.json({
       message: 'Login successful',
+    
       token,
-      user: { id: user.id, name: user.name, email: user.email }
+      user: { id: user.id, name: user.name, email: user.email, role }
     });
   } catch (err) {
     console.error('Login error:', err);
